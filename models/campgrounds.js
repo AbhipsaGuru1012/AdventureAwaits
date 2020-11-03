@@ -1,7 +1,7 @@
 const mongoose=require("mongoose")
 
-//Schema setup
-const opts={toJSON: {virtuals:true}};//see use of this
+
+const opts={toJSON: {virtuals:true}};
 
 
 
@@ -26,7 +26,7 @@ const campgroundSchema=new mongoose.Schema({
 	review:[
 		{
 			type:mongoose.Schema.Types.ObjectId,
-			ref:"Review"//review model
+			ref:"Review"
 		}
 	],
 	author:{
@@ -36,29 +36,27 @@ const campgroundSchema=new mongoose.Schema({
 		},
 		username:String
 	},
-	comments:[//data association
+	comments:[
 		{
-			type:mongoose.Schema.Types.ObjectId,//refrence type association
+			type:mongoose.Schema.Types.ObjectId,
 			ref:"Comment"
 		}
 	]
 },opts)
 
-// campgroundSchema.virtual('thumbnail').get(function(){
-// 	return this.image.replace('/upload', '/upload/w_200')
-// })//this is not working, in the image edit in edit form
 
-campgroundSchema.virtual('properties.popUpMarkup').get(function(){//see the use of this statement and virtual//to populate properties field in map
-	return `<strong><a href="/campgrounds/${this._id}">${this.name}</a></strong>`//the particular campground instance is this
+
+campgroundSchema.virtual('properties.popUpMarkup').get(function(){
+	return `<strong><a href="/campgrounds/${this._id}">${this.name}</a></strong>`
 })
-campgroundSchema.post('findOneAndDelete', async function (doc){//mongoose middleware to delete reviews from database after a particular campground was deleted
+campgroundSchema.post('findOneAndDelete', async function (doc){
 		if(doc){
 			await Review.deleteMany({
 				_id:{
-					$in:doc.review//delete all reviews in the id of campground that was deleted
+					$in:doc.review
 				}
 			})
 		}
 })
 
-module.exports=mongoose.model("Campground",campgroundSchema);//compiling schema into a model
+module.exports=mongoose.model("Campground",campgroundSchema);
