@@ -7,7 +7,7 @@
 			<p class="lead">
 				Wilderness Experience
 			</p>
-			<div class="list-group"><!--forms a side-bar-->
+			<div class="list-group">
 			
 				<li class="list-group-item active">Info</li>
 				<li class="list-group-item">Map</li>
@@ -101,7 +101,7 @@
 								<em>Submitted By <%=campground.author.username%></em>
 							 </p>
 						 </div>
-						 <%if(currentUser && campground.author.id.equals(currentUser._id)){%><!--currentUser is coming grom app.js, it is available in all templates-->
+						 <%if(currentUser && campground.author.id.equals(currentUser._id)){%>
 							<a class="btn btn-warning" href="/campgrounds/<%=campground._id%>/edit">Edit</a>
 							<form id="delete-form" style="display:inline" action="/campgrounds/<%=campground._id%>?_method=DELETE" method="POST">
 								<button class="btn btn-danger">
@@ -128,7 +128,7 @@
 							<p>
 								<%= comment.text %>
 							</p>
-							<%if(currentUser && comment.author.id.equals(currentUser._id)){%><!--currentUser is coming grom app.js, it is available in all templates-->
+							<%if(currentUser && comment.author.id.equals(currentUser._id)){%>
 								<a class="btn btn-sm btn-warning" href="/campgrounds/<%=campground._id%>/comments/<%=comment._id%>/edit">Edit</a>
 								<form id="delete-form" style="display:inline" action="/campgrounds/<%=campground._id%>/comments/<%=comment._id%>?_method=DELETE" method="POST">
 									<input type="submit" id="delete-form" class="btn btn-sm btn-danger" value="Delete">
@@ -147,8 +147,7 @@
 
 <script>
 	var mapToken='<%-process.env.MAPBOX_TOKEN%>';
-	//we can't put ejs in the showPageMap.js file as it won't consider it as ejs, so first put it in mapToken and then use it in showPageMap.js
-	var campground=<%-JSON.stringify(campground)%>//see the use of this line(imp)
+	var campground=<%-JSON.stringify(campground)%>
 </script>
 <script src="/Javascripts/showPageMap.js"></script>
 <%- include("../partials/footer") %>
