@@ -1,0 +1,82 @@
+<%- include("../partials/header") %>
+
+
+<div class="container">
+	<div class="background" style="background-image:url('https://images.unsplash.com/photo-1528433556524-74e7e3bfa599?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60'); height:300px; background-repeat:none; background-size:cover; background-position:center; z-index:0;">
+		
+		<div class="container" style="z-index:1">
+			
+			<h1>
+				Welcome To Wilderness Experience!
+			</h1>
+			<p>
+				View our hand-picked camps from all around India
+			</p>
+			<p>
+				<a class="btn btn-primary btn-lg" href="/campgrounds/new">Add a New Campground</a>
+
+			</p>
+			<!-- <div id='map' style='width: 900px; height: 700px;'></div>
+			<script>
+				mapboxgl.accessToken = 'pk.eyJ1IjoiYWJoaXBzYTEwMTIiLCJhIjoiY2tnbnNxcmY2MGFheTMwczFkNDdzMDBqayJ9.gDVbPz--S0rJVqo7BQl_cQ';
+				var map = new mapboxgl.Map({
+				container: 'map',
+				style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
+				center: [78.9629, 20.5937], // starting position [lng, lat]
+				zoom: 4.2 // starting zoom
+				});
+				
+			</script> -->
+		</div>
+		
+		
+	</div>
+	<br>
+	<div id="cluster-map">
+			
+	</div>
+	<br>
+	<br>
+	<div class="row text-center">
+		<% campgrounds.forEach(function(campground){ %>
+		<div class="col-sm-6 col-md-3">
+			
+			<!--<div class="thumbnail">
+				<img src="<%= campground.image %>" class="img-thumbnail">
+				<div class="caption">
+					<h4>
+						<%= campground.name %>
+					</h4>
+				</div>
+
+			</div>-->
+			
+			<div class="card mb-3">
+			  <img src="<%= campground.image %>" class="card-img-top" alt="<%= campground.name %>">
+			  <div class="card-body">
+				<h5 class="card-title"><%= campground.name %></h5>
+				  <p class="card-text">
+					  <%=campground.description.substring(0,30)%>...
+				  </p>
+				  <p class="card-text">
+					  <small class="text-muted"><%=campground.location%></small>
+				  </p>
+				<a href="/campgrounds/<%= campground._id %>" class="btn btn-primary">More info</a><!--the id is automatically generated from mongodb from the function passing campground-->
+			 </div>
+			</div>	
+		</div>
+
+
+		<% }) %>
+	</div>
+	
+	
+</div>
+
+<script>
+	var mapToken='<%-process.env.MAPBOX_TOKEN%>';
+	//we can't put ejs in the showPageMap.js file as it won't consider it as ejs, so first put it in mapToken and then use it in showPageMap.js
+	var campgrounds={features:<%-JSON.stringify(campgrounds)%>}//make it as an object, mapbox needs it that way
+</script>
+<script src="Javascripts/clusterMap.js"></script>
+<%- include("../partials/footer") %>

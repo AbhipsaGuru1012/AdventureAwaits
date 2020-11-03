@@ -1,0 +1,154 @@
+<%- include("../partials/header") %>
+
+<link rel="stylesheet" href="/stylesheets/rating.css">
+<div class="container">
+	<div class="row">
+		<div class="col-md-4">
+			<p class="lead">
+				Wilderness Experience
+			</p>
+			<div class="list-group"><!--forms a side-bar-->
+			
+				<li class="list-group-item active">Info</li>
+				<li class="list-group-item">Map</li>
+				<li class="list-group-item">Reviews</li>
+			</div>
+			<br>
+			<div id='map'></div>
+			
+			<%if(currentUser){%>
+			<h5>
+				Leave a Review
+			</h5>
+			 <form action="/campgrounds/<%=campground._id%>/reviews" method="POST" class="mb-3">
+				 <!-- <div class="mb-3">
+					<label class="form-label" for="rating">Rating</label>
+					<input type="range" min="1" max="5" name="review[rating]" class="form-range" id="rating">
+				</div> -->
+				 <div class="mb-3">
+					 
+					 <fieldset class="starability-grow">
+						  
+						  <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
+						  <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+						  <label for="first-rate1" title="Terrible">1 star</label>
+						  <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+						  <label for="first-rate2" title="Not good">2 stars</label>
+						  <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+						  <label for="first-rate3" title="Average">3 stars</label>
+						  <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+						  <label for="first-rate4" title="Very good">4 stars</label>
+						  <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+						  <label for="first-rate5" title="Amazing">5 stars</label>
+					</fieldset>
+				 </div>
+				<div class="mb-3">
+					<label class="form-label" for="body">
+						Review Text
+					</label>
+					<textarea class="form-control" name="review[body]" id="body" rows="3" cols="30" required></textarea>
+				</div> 
+				
+				<button class="btn btn-success">
+					Submit
+				 </button> 
+				
+			</form>
+			<%}%>
+			<%for (let review of campground.review){%>
+					 <div class="card">
+						 <div class="card-body">
+							 <!-- <h5 class="card-title">
+								 Rating:<%=review.rating%>
+							 </h5> -->
+							 <p class="starability-result" data-rating="<%=review.rating%>">
+								Rated: <%=review.rating%> stars
+							 </p>
+							 <h7 class="card-subtitle text-muted">
+								 By: <%=review.author.username%>
+							 </h7> 
+							<p class="card-text">
+								Review: <%=review.body%>
+							</p>
+							<%if(currentUser && review.author.id.equals(currentUser._id)){%>
+							 <form action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
+								 <button class="btn btn-sm btn-danger">
+									 Delete
+								 </button>
+							 </form>
+							 <%}%>
+						 </div>
+					</div>
+			  <%}%>
+			
+		</div>
+		<div class="col-md-8">
+				<div class="card">
+					 <img class="image-responsive" src="<%= campground.image %>" class="card-img-top" alt="<%= campground.name %>">
+					 <div class="card-body caption-full">
+						<h5 class="text-right">
+							Rs.<%=campground.price%>/night 
+						</h5>
+						<h4 class="card-title"><a><%= campground.name %></a></h4>
+						<p>
+							<%= campground.description %>
+						 </p> 
+						 <p>
+							 <strong>Location: </strong><%=campground.location%>
+						 </p>
+						 <div class="card-footer text-muted">
+							<p>
+								<em>Submitted By <%=campground.author.username%></em>
+							 </p>
+						 </div>
+						 <%if(currentUser && campground.author.id.equals(currentUser._id)){%><!--currentUser is coming grom app.js, it is available in all templates-->
+							<a class="btn btn-warning" href="/campgrounds/<%=campground._id%>/edit">Edit</a>
+							<form id="delete-form" style="display:inline" action="/campgrounds/<%=campground._id%>?_method=DELETE" method="POST">
+								<button class="btn btn-danger">
+									Delete
+								</button>
+							</form>						 
+						 <%}%>
+						 
+					 </div>
+
+				</div>
+				<br>
+				<div class="jumbotron">
+					<div class="text-right">
+					 	<a class="btn btn-success" href="/campgrounds/<%=campground._id%>/comments/new">Add New Comment</a>
+				 	</div>
+					<hr>
+					<% campground.comments.forEach(function(comment){ %>
+					<div class="row">
+						<div class="col-md-12">
+							
+							<strong><%= comment.author.username %> </strong>
+							<span style="float:right;">10 days ago</span>
+							<p>
+								<%= comment.text %>
+							</p>
+							<%if(currentUser && comment.author.id.equals(currentUser._id)){%><!--currentUser is coming grom app.js, it is available in all templates-->
+								<a class="btn btn-sm btn-warning" href="/campgrounds/<%=campground._id%>/comments/<%=comment._id%>/edit">Edit</a>
+								<form id="delete-form" style="display:inline" action="/campgrounds/<%=campground._id%>/comments/<%=comment._id%>?_method=DELETE" method="POST">
+									<input type="submit" id="delete-form" class="btn btn-sm btn-danger" value="Delete">
+								</form>
+							<%}%>
+						</div>	
+					</div>
+
+					<% }) %>
+				</div>
+			    
+			
+		</div>
+	</div>
+</div>
+
+<script>
+	var mapToken='<%-process.env.MAPBOX_TOKEN%>';
+	//we can't put ejs in the showPageMap.js file as it won't consider it as ejs, so first put it in mapToken and then use it in showPageMap.js
+	var campground=<%-JSON.stringify(campground)%>//see the use of this line(imp)
+</script>
+<script src="/Javascripts/showPageMap.js"></script>
+<%- include("../partials/footer") %>

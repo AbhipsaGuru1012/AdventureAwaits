@@ -1,0 +1,44 @@
+<%- include("./partials/header") %>
+
+<div class="container d-flex justify-content-center align-items-center mt-5">
+	<div class="row">
+		<div class="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
+			<div class="card shadow">
+				<img src="https://images.unsplash.com/photo-1486082570281-d942af5c39b7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1051&q=80" alt="" class="card-img-top"/>
+				<div class="card-body">
+					<h5 class="card-title">
+						Login
+					</h5>
+					
+						<form action="/login" method="POST" novalidate class="validated-form">
+							<div class="form-group">
+								<input class="form-control" type="text" autofocus name="username" placeholder="username" required>
+								<div class="valid-feedback">
+									Looks good!
+								 </div>
+							</div>
+							<div class="form-group">
+								<input class="form-control" type="password" name="password" placeholder="password" required>
+								<div class="valid-feedback">
+									Looks good!
+								 </div>
+							</div>
+							<div class="form-group">
+								<button class="btn btn-lg btn-info btn-block">
+									Login
+								</button>
+							</div>
+
+
+						</form>
+					
+				</div>
+			</div>
+		</div>
+	
+	</div>
+</div>
+
+<script src="/Javascripts/validation.js"></script>
+
+<%- include("./partials/footer") %>

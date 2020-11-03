@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		<meta charset="UTF-8">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>WildernessExperience</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-		Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" href="/stylesheets/landing.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript" async></script>
+    </head>
+    <body>
+    
+    <div class="container">
+       <%if(error && error.length>0){%>
+				<div class="alert alert-danger" role="alert">
+				  <%=error%>
+				</div>
+			<%}%>
+			<%if(success && success.length>0){%>
+				<div class="alert alert-success" role="alert">
+				  <%=success%>
+				</div>
+			<%}%>
+    </div>
+    
+    <div id="landing-header">
+ 		<h1>Welcome to your very own Wilderness Experience!</h1>
+		<h7>Browse Indian campgrounds, add your comments, share your experiences. Happy Camping!</h7>
+		<br>
+		<br>
+		<a href="/campgrounds" class="btn btn-lg btn-success">View All Campgrounds in India</a>
+    </div>
+    
+    <ul class="slideshow">
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
+
+	</body>
+</html>
