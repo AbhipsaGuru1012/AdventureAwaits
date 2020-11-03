@@ -25,11 +25,6 @@ const commentRoutes=require("./routes/comments"),
 	authRoutes=require("./routes/index")
 
 
-// mongoose.connect("mongodb://localhost/yelp_camp", { //creates new db called yelp_camp
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true
-// })
-
 // const MongoClient = require('mongodb').MongoClient;
  mongoose.connect(dbUrl, {
 	useNewUrlParser: true,
@@ -53,8 +48,8 @@ db.once("open", () => {
 
 app.set("view engine", "ejs")
 app.use(bodyParser.urlencoded({extended:true}));
-app.use(express.static(__dirname + "/public"));//conventional way of adding directory name
-app.use(methodOverride("_method"));// _method is conventional way
+app.use(express.static(__dirname + "/public"));
+app.use(methodOverride("_method"));
 app.use(mongoSanitize());
 
 const secret=process.env.SECRET || 'thisshouldbeabettersecret!';
@@ -88,8 +83,7 @@ app.use(session(sessionConfig));
 app.use(flash());
 app.use(helmet({contentSecurityPolicy:false}));
 
-//seedDB();//seed the db
-//Passport configuration
+
 app.use(require("express-session")({
 	secret:"You should not ne naming you-know-who",
 	resave:false,
@@ -151,26 +145,13 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
-passport.use(new LocalStrategy(User.authenticate()))//User.authenticate comes with passport-local-mongoose
+passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-//Campground.create({
-//	name:"Rishikesh Valley Camp", 
-//	image:"https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTPo69DcEF_1kgxZ3DGHrV0coYooQ_rI2DXYg&usqp=CAU",
-//	description:"This camground lies on the outskirts of Rishikesh. Beautiful Place."
-//},function(err,campground){
-//	if(err){
-//		console.log("Error!");
-//	}else{
-//		console.log("Campground created");
-//		console.log(campground);
-//	}
-//})
-
 
 app.use(function(req, res, next){
-	res.locals.currentUser=req.user;//passes it to all templates
+	res.locals.currentUser=req.user;
 	res.locals.error=req.flash("error");
 	res.locals.success=req.flash("success");
 	next();
@@ -178,7 +159,7 @@ app.use(function(req, res, next){
 
 
 app.use("/campgrounds/:id/comments",commentRoutes);
-app.use("/campgrounds", campgroundRoutes);//adds /campgrounds to all campgrounds routes
+app.use("/campgrounds", campgroundRoutes);
 app.use(authRoutes)
 
 const port=process.env.PORT || 3000;
