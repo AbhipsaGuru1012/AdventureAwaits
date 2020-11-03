@@ -181,6 +181,8 @@ app.use("/campgrounds/:id/comments",commentRoutes);
 app.use("/campgrounds", campgroundRoutes);//adds /campgrounds to all campgrounds routes
 app.use(authRoutes)
 
-app.listen(3000,() => {
-	console.log("Server listening in port 3000");
+const port=process.env.PORT || 3000;
+
+app.listen(port,() => {
+	console.log(`Server listening on ${port}`);
 })
